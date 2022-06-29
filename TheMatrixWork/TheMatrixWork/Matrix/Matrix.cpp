@@ -277,20 +277,18 @@ double SquareMatrix::det() {//Определитель
 
 
        for(int col = 0; col < n; ++col) {
-          bool found = false;
-          for(int row = col; row < n; ++row) {
-             if(tmp[row][col]) {
-                if ( row != col )
-                {
-                    tmp[row].swap(tmp[col]);
-                }
-                found = true;
-                break;
-             }
-          }
-          if(!found) {
-             return 0;
-          }
+           bool found = false;
+           for(int row = col; row < n; ++row) {
+               if(tmp[row][col]) {
+                   if ( row != col ){
+                       res*=-1;
+                       tmp[row].swap(tmp[col]);
+                   }
+                   found = true;
+                   break;
+               }
+           }
+           if(!found) { return 0; }
           for(int row = col + 1; row < n; ++row) {
              while(true) {
                 int del = tmp[row][col] / tmp[col][col];
@@ -567,4 +565,17 @@ void Matrix::toBinary(std::string bin){
     std::ofstream ss(bin+".bin");
     
     ss << (*this);
+}
+
+
+double PCA::centr(Matrix matrix, int j = 0){
+    double m = 0;
+    
+    for(int i = 0;i<matrix.GetM();++i){
+        m += matrix[i][j];
+    }
+    
+    m /= (matrix.GetM()-1);
+    
+    return m;
 }

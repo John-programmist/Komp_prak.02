@@ -11,6 +11,7 @@
 #include <string>
 #include <cstdlib>
 #include <cassert>
+#include <initializer_list>
 
 
 enum vector{
@@ -18,10 +19,12 @@ enum vector{
     HORIZONTAL
 };
 
+
 class Matrix{
 public:
-    int m;
-    int n;
+    
+    int m; //Строки
+    int n; //Столбцы
     std::vector<std::vector<double>> matrix;
     Matrix(int m=0, int n=0):n(n), m(m){//Конструктор по умолчанию
         matrix.resize(m);
@@ -32,6 +35,8 @@ public:
             }
         }
     }
+    
+    
     
     ~Matrix() = default;//Деструктор
     
@@ -86,6 +91,18 @@ public:
     }
     
     
+    Matrix(std::initializer_list<double> l){
+        n = static_cast<int>(l.size());
+        m = 1;
+        auto it = l.begin();
+        matrix.resize(1);
+        matrix[0].resize(n);
+        for(int j = 0;j<n;++j){
+            matrix[0][j] = *it;
+            it++;
+        }
+    }
+    
     friend std::ostream& operator<<(std::ostream& out, const Matrix& matrix);//Вывод
     friend std::istream& operator>>(std::istream& in, Matrix& matrix);//Ввод
     friend std::ofstream& operator<<(std::ofstream& out, Matrix const& matrix);
@@ -132,12 +149,26 @@ public:
     
     double frobenNorm();
     
+    
+    
+
 };
+
+
+class PCA{
+public:
+    double centr(Matrix matrix, int j);
+    double shkala(Matrix matrix, int i, int j);
+};
+
+
 
 class Vector: public Matrix{
 public:
     Vector(vector vector, int N=0):Matrix(vector,N){}
     ~Vector() = default;
+    
+    Vector(std::initializer_list<double> l):Matrix(l){}
     
     
     double euclideanNorm();
